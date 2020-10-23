@@ -1,19 +1,12 @@
 import random
-
-
-# hàm này k cân thiết cho ds ra global lun vì mình sử dụng thường xuyên gọi hàm tôn stack
-def chuyenSoThanhHinh(n):
-    ds = ["cua", "bau", "tom", "ca", "ga", "nai"]
-    return ds[n]
-
+ds = ["cua","bau","tom","ca","ga","nai"]
 
 def lac():
     kq = []
-    for i in range(0, 3):
+    for i in range(0,3):
         n = random.randrange(6)
-        kq.append(chuyenSoThanhHinh(n))
+        kq.append(ds[n])
     return kq
-
 
 def tinhDiem(datCuoc, kq):
     tongDiem = 0
@@ -25,37 +18,47 @@ def tinhDiem(datCuoc, kq):
                 tongDiem += soluong * diem
     return tongDiem + hoanTien
 
-
 def dem(kq):
     kqm = {}
     for i in kq:
         kqm[i] = kq.count(i)
     return kqm
 
+def kiemTraHinh(hinh):
+    while(True):
+        if hinh not in ds:
+            hinh = (input("Nhập lại con bạn muốn(vd: cua, tom, ca,..): ")).lower()
+        else:
+            break
+    return hinh
 
 def nhapLuaChon(diemTong):
-    datCuoc = {}
+    diemHienTai = diemTong
+    datCuoc ={}
     dem = 3
-    while(dem > 0):
+    while(dem>0):
         xacnhan = input("Bạn có muốn đặt cược tiếp không (y/n) ")
-        if (xacnhan.lower() == "y"):
-            # check input ở đây nữa nhập sai nhập lại tốt nhát cho người ta vd mẫu
-            hinh = (input("Nhập con bạn muốn: ")).lower()
-            # check chỗ này vì nhập số cược lơn hơn Điểm mình đang có
-            diem = int(input("Số điểm bạn cược: "))
-            datCuoc[hinh] = diem
-            diemTong = diemTong - diem
-            dem = dem - 1
-        else:  # nếu k xử lý gì thì chú xóa dòng này vì nó k thiết break thẳng lun
+        if (xacnhan.lower() == "y"):         
+            hinh = (input("Nhập con bạn muốn(vd: cua, tom, ca,..): ")).lower()
+            hinh = kiemTraHinh(hinh)
+            diem = int(input("Số điểm bạn cược(vd: 100,200,..): "))
+            diemConLai = diemHienTai - diem
+            if(diemConLai > 0):
+                datCuoc[hinh] = diem
+                diemHienTai = diemConLai
+                dem = dem - 1
+            else:
+                print("Bạn không đủ điểm để chơi tiếp! \nChúng tôi đã lưu kết quả cược của bạn!")
+                break
+        else:
             break
-    return datCuoc, diemTong
-
+    return datCuoc, diemHienTai
 
 def chayChuongTrinh():
-    diemTong = 1000
-    print("*Điểm ban đầu : %d *" % (diemTong))
+    diemTong= 1000
+    print("*Điểm ban đầu : %d *" %(diemTong))
     while(True):
-        if(diemTong > 0):
+        if(diemTong > 1):
             print("------Game Bầu Cua------")
             print("1. Chơi          2. Đóng")
             chon = input("=>: ")
@@ -63,22 +66,27 @@ def chayChuongTrinh():
                 datCuoc = {}
                 ketQua = lac()
                 ketQuaSauKhiDem = dem(ketQua)
-                # đặt rồi mời chạy code lắc
-                datCuoc, diemTong = nhapLuaChon(diemTong)
-                print("dc = ", datCuoc)
+                datCuoc, diemHienTai = nhapLuaChon(diemTong)
+                #print("dc = ",datCuoc)
                 if(len(datCuoc) == 0):
-                    diemAn = 0
+                    diem = 0
                 else:
-                    diemAn = tinhDiem(datCuoc, ketQuaSauKhiDem)
-                print("an = ", diemAn)
-                print("kết quả lần lắc này: ", ketQua)
-                diemTong = diemTong + diemAn
-                print("*Điểm còn: %d *" % diemTong)
+                    diem = tinhDiem(datCuoc, ketQuaSauKhiDem)
+                print("Số điểm trả lại: ", diem)
+                print("kết quả lần lắc này: ",ketQua)
+                diemTong = diemHienTai + diem
+                print("*Điểm còn: %d *" %diemTong)
             else:
                 break
         else:
             break
     print("Game Over!")
 
-
 chayChuongTrinh()
+
+
+                
+                
+
+
+
