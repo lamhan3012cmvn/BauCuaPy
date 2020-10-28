@@ -1,5 +1,6 @@
 import random
 ds = ["cua","bau","tom","ca","ga","nai"]
+lichSu = {}
 
 def lac():
     kq = []
@@ -54,30 +55,43 @@ def nhapLuaChon(diemTong):
             break
     return datCuoc, diemHienTai
 
+def luuLichSu(n, ketQua, datCuoc):
+    lichSu[str(n)] = ketQua, datCuoc
+
+def xuatLichSu():
+    for lan, [ketQua, datCuoc] in lichSu.items():
+        print("Lần %s = %s | Bạn đặt = %s"%(lan, ketQua, datCuoc))
+
 def chayChuongTrinh():
     diemTong= 1000
     print("*Điểm ban đầu : %d *" %(diemTong))
+    lanLac = 1
     while(True):
         if(diemTong > 1):
             print("------Game Bầu Cua------")
-            print("1. Chơi          2. Đóng")
+            print("1.Chơi\n2.Lịch Sử\n0. Đóng ")
             chon = input("=>: ")
             if (chon == "1"):
                 datCuoc = {}
                 ketQua = lac()
                 ketQuaSauKhiDem = dem(ketQua)
                 datCuoc, diemHienTai = nhapLuaChon(diemTong)
-                #print("dc = ",datCuoc)
                 if(len(datCuoc) == 0):
                     diem = 0
                 else:
                     diem = tinhDiem(datCuoc, ketQuaSauKhiDem)
+                #
                 print("Số điểm trả lại: ", diem)
-                print("kết quả lần lắc này: ",ketQua)
+                print("Kết quả lần lắc này: ",ketQua)
                 diemTong = diemHienTai + diem
                 print("*Điểm còn: %d *" %diemTong)
-            else:
+                #
+                luuLichSu(lanLac, ketQua, datCuoc)
+                lanLac += 1
+            if(chon == "0"):
                 break
+            if(chon == "2"):
+                xuatLichSu()
         else:
             break
     print("Game Over!")
